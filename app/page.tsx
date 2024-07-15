@@ -1,9 +1,15 @@
+'use client'
+
+import { useEffect } from "react";
+import { fetchDex } from "@/app/lib/actions";
 import Header from "@/app/ui/header";
 import SVForm from "./ui/forms/sv-form";
 import Count from "./ui/count";
 import Box from "./ui/box";
 
 const Page = () => {
+	const SVdex = fetchDex('paldea')
+
 	return (
 		<>
 			<Header />
