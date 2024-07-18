@@ -58,6 +58,14 @@ const SVForm = () => {
 									<label htmlFor="forms">Multiple Forms</label>
 								</div>
 							</div>
+							<div className="flex gap-x-2 items-center">
+								<div className="flex h-6 items-center">
+									<input type="checkbox" id="caps" name="caps" className={checkboxStyles} />
+								</div>
+								<div className="text-slate-600">
+									<label htmlFor="caps">Pikachu Caps</label>
+								</div>
+							</div>
 						</div>
 					</fieldset>
 				</div>
