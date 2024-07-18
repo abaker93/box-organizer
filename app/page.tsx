@@ -222,7 +222,7 @@ export default async function Page() {
 		<>
 			<Header />
 
-			<main>
+			<main className="p-8">
 				<div className="max-w-7xl mx-auto pt-4">
 					<SVForm />
 					<Count />
