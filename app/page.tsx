@@ -1,15 +1,15 @@
-'use client'
+'use client';
 
-import { useEffect, useState } from "react"
-import Header from "@/app/ui/header"
-import Form from "./ui/forms/form"
-import Count from "./ui/count"
-import Box from "./ui/box"
-import getPokedex from "@/app/api/pokedex"
+import { useEffect, useState } from "react";
+import Header from "@/app/ui/header";
+import Form from "./ui/forms/form";
+import Count from "./ui/count";
+import Box from "./ui/box";
+import getPokedex from "@/app/api/pokedex";
 
-const useLocalStorage = (key:any, fbState:any) => {
+const useLocalStorage = (key:any, fbState:any)=> {
 	const [value, setValue] = useState(
-		JSON.parse(typeof window !== 'undefined' ? window.localStorage.getItem(key) : fbState) ?? fbState
+		typeof window !== 'undefined' ? JSON.parse(window.localStorage.getItem(key) ?? "") :  fbState
 	)
 
 	useEffect(() => {
@@ -21,7 +21,7 @@ const useLocalStorage = (key:any, fbState:any) => {
 
 export default function Page() {
 	const [lang, setLang] = useState('en')
-	const [dex, setDex] = useLocalStorage('dex', 'paldea')
+	const [dex, setDex] = useState('paldea')
 
 	const [loading, setLoading] = useState(true)
 	const [pokedex, setPokedex] = useState()
@@ -249,7 +249,7 @@ export default function Page() {
 		for (let i = 1; i <= boxCount; i++) {
 			boxes.push({
 				box: i,
-				pokemon: pokemon.slice(30 * i - 30, 30 * i)
+				pokemon: pokemonData.slice(30 * i - 30, 30 * i)
 			})
 		}
 
