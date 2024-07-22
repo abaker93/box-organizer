@@ -9,7 +9,7 @@ import getPokedex from "@/app/api/pokedex"
 
 const useLocalStorage = (key:any, fbState:any) => {
 	const [value, setValue] = useState(
-		JSON.parse(localStorage.getItem(key) ?? "") ?? fbState
+		JSON.parse(window.localStorage.getItem(key) ?? "") ?? fbState
 	)
 
 	useEffect(() => {
