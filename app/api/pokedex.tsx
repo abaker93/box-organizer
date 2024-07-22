@@ -1,3 +1,5 @@
+'use server'
+
 export default async function getPokedex(dex:string) {
 	const res = await fetch('https://us-east-2.aws.data.mongodb-api.com/app/data-goxxqig/endpoint/data/v1/action/find', {
     method: 'POST',
@@ -11,6 +13,7 @@ export default async function getPokedex(dex:string) {
 			"dataSource": "pokemon-box-organizer"
 		}),
   })
+    .then(response => response.json())
 
-	return res.json()
+	return res
 }

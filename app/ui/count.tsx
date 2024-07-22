@@ -1,7 +1,7 @@
-const Count = () => {
+const Count = (props:any) => {
 	return (
 		<div className="mt-6">
-			<p>Showing: 400 Pokémon</p>
+			<p>Showing: {props.total} Pokémon</p>
 		</div>
 	)
 }
