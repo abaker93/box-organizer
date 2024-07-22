@@ -7,16 +7,27 @@ import Count from "./ui/count";
 import Box from "./ui/box";
 import getPokedex from "@/app/api/pokedex";
 
-const useLocalStorage = (key:any, fbState:any)=> {
-	const [value, setValue] = useState(
-		typeof window !== 'undefined' ? JSON.parse(window.localStorage.getItem(key) ?? "") :  fbState
-	)
+const useLocalStorage = (key:any, initialValue:any)=> {
+	const [state, setState] = useState(() => {
+		try {
+			const value = window.localStorage.getItem(key)
+			return value ? JSON.parse(value) : initialValue
+		} catch (e) {
+			console.log(e)
+		}
+	})
 
-	useEffect(() => {
-		typeof window !== 'undefined' ? window.localStorage.setItem(key, JSON.stringify(value)) : null
-	}, [value, key])
+	const setValue = value => {
+		try {
+			const valueToStore = value instanceof Function ? value(state) : value
+			window.localStorage.setItem(key, JSON.stringify(valueToStore))
+			setState(value)
+		} catch (e) {
+			console.log(e)
+		}
+	}
 
-	return [value, setValue]
+	return [state, setValue]
 }
 
 export default function Page() {
@@ -28,14 +39,15 @@ export default function Page() {
 	const [pokemon, setPokemon] = useState([])
 	const [displayCount, setDisplayCount] = useState(0)
 
-	const [shinyOption, setShinyOption] = useLocalStorage('shinyOption', false)
-	const [genderOption, setGenderOption] = useLocalStorage('genderOption', false)
-	const [formOption, setFormOption] = useLocalStorage('formOption', false)
-	const [capOption, setCapOption] = useLocalStorage('capOption', false)
+	const [shinyStorage, setShinyStorage] = useLocalStorage('shinyOption', false)
+	const [shinyOption, setShinyOption] = useState(shinyStorage)
+	const [genderOption, setGenderOption] = useState(false)
+	const [formOption, setFormOption] = useState(false)
+	const [capOption, setCapOption] = useState(false)
 
-	const [showName, setShowName] = useLocalStorage('showName', false)
-	const [showNumber, setShowNumber] = useLocalStorage('showNumber', false)
-	const [showState, setShowState] = useLocalStorage('showState', false)
+	const [showName, setShowName] = useState(false)
+	const [showNumber, setShowNumber] = useState(false)
+	const [showState, setShowState] = useState(false)
 
 	useEffect(() => {
 		getPokedex(dex)
@@ -237,9 +249,7 @@ export default function Page() {
 		}
 	}, [pokedex, genderOption, formOption, capOption])
 
-	useEffect(() => {
-		setDisplayCount(pokemon.length)
-	}, [pokemon])
+	useEffect(() => setDisplayCount(pokemon.length), [pokemon])
 
 	const createBoxes = () => {
 		const pokemonData = pokemon.sort((a:any,b:any) => a.order - b.order || a.variation_order - b.variation_order)
@@ -268,7 +278,10 @@ export default function Page() {
 						<Form
 							{...{dex, shinyOption, genderOption, formOption, capOption, showName, showNumber, showState}}
 							onChangeDex={(e:any) => setDex((e.target.value).toLowerCase())}
-							onChangeShiny={(e:any) => setShinyOption(e.target.checked)}
+							onChangeShiny={(e:any) => {
+								setShinyStorage(e.target.checked)
+								setShinyOption(e.target.checked)
+							}}
 							onChangeGender={(e:any) => setGenderOption(e.target.checked)}
 							onChangeForm={(e:any) => setFormOption(e.target.checked)}
 							onChangeCap={(e:any) => setCapOption(e.target.checked)}
@@ -276,6 +289,7 @@ export default function Page() {
 							onChangeShowNumber={(e:any) => setShowNumber(e.target.checked)}
 							onChangeShowState={(e:any) => setShowState(e.target.checked)}
 						/>
+						<p>Shiny: {shinyOption}</p>
 						<Count total={displayCount} />
 					</div>
 
