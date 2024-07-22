@@ -32,7 +32,8 @@ const useLocalStorage = (key:any, initialValue:any)=> {
 
 export default function Page() {
 	const [lang, setLang] = useState('en')
-	const [dex, setDex] = useState('paldea')
+	const [dexStorage, setDexStorage] = useLocalStorage('dex', 'paldea')
+	const [dex, setDex] = useState(dexStorage)
 
 	const [loading, setLoading] = useState(true)
 	const [pokedex, setPokedex] = useState()
@@ -41,13 +42,24 @@ export default function Page() {
 
 	const [shinyStorage, setShinyStorage] = useLocalStorage('shinyOption', false)
 	const [shinyOption, setShinyOption] = useState(shinyStorage)
-	const [genderOption, setGenderOption] = useState(false)
-	const [formOption, setFormOption] = useState(false)
-	const [capOption, setCapOption] = useState(false)
 
-	const [showName, setShowName] = useState(false)
-	const [showNumber, setShowNumber] = useState(false)
-	const [showState, setShowState] = useState(false)
+	const [genderStorage, setGenderStorage] = useLocalStorage('genderOption', false)
+	const [genderOption, setGenderOption] = useState(genderStorage)
+
+	const [formStorage, setFormStorage] = useLocalStorage('formOption', false)
+	const [formOption, setFormOption] = useState(formStorage)
+
+	const [capStorage, setCapStorage] = useLocalStorage('capOption', false)
+	const [capOption, setCapOption] = useState(capStorage)
+
+	const [showNameStorage, setShowNameStorage] = useLocalStorage('showName', false)
+	const [showName, setShowName] = useState(showNameStorage)
+
+	const [showNumberStorage, setShowNumberStorage] = useLocalStorage('showNumber', false)
+	const [showNumber, setShowNumber] = useState(showNumberStorage)
+
+	const [showStateStorage, setShowStateStorage] = useLocalStorage('showState', false)
+	const [showState, setShowState] = useState(showStateStorage)
 
 	useEffect(() => {
 		getPokedex(dex)
@@ -277,17 +289,38 @@ export default function Page() {
 					<div className="max-w-7xl mx-auto pt-4">
 						<Form
 							{...{dex, shinyOption, genderOption, formOption, capOption, showName, showNumber, showState}}
-							onChangeDex={(e:any) => setDex((e.target.value).toLowerCase())}
+							onChangeDex={(e:any) => {
+								setDexStorage((e.target.value).toLowerCase())
+								setDex((e.target.value).toLowerCase())
+							}}
 							onChangeShiny={(e:any) => {
 								setShinyStorage(e.target.checked)
 								setShinyOption(e.target.checked)
 							}}
-							onChangeGender={(e:any) => setGenderOption(e.target.checked)}
-							onChangeForm={(e:any) => setFormOption(e.target.checked)}
-							onChangeCap={(e:any) => setCapOption(e.target.checked)}
-							onChangeShowName={(e:any) => setShowName(e.target.checked)}
-							onChangeShowNumber={(e:any) => setShowNumber(e.target.checked)}
-							onChangeShowState={(e:any) => setShowState(e.target.checked)}
+							onChangeGender={(e:any) => {
+								setGenderStorage(e.target.checked)
+								setGenderOption(e.target.checked)
+							}}
+							onChangeForm={(e:any) => {
+								setFormStorage(e.target.checked)
+								setFormOption(e.target.checked)
+							}}
+							onChangeCap={(e:any) => {
+								setCapStorage(e.target.checked)
+								setCapOption(e.target.checked)
+							}}
+							onChangeShowName={(e:any) => {
+								setShowNameStorage(e.target.checked)
+								setShowName(e.target.checked)
+							}}
+							onChangeShowNumber={(e:any) => {
+								setShowNumberStorage(e.target.checked)
+								setShowNumber(e.target.checked)
+							}}
+							onChangeShowState={(e:any) => {
+								setShowStateStorage(e.target.checked)
+								setShowState(e.target.checked)
+							}}
 						/>
 						<p>Shiny: {shinyOption}</p>
 						<Count total={displayCount} />
