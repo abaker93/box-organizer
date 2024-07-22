@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { formatPokeNum, getPokeName } from "@/app/lib/utils";
 
 const Box = (props:any) => {
@@ -17,7 +18,13 @@ const Box = (props:any) => {
 			<div className="grid grid-cols-6 gap-2 p-4">
 				{props.pokemon.map((m:any) => (
 					<div key={`${m.order}-${m.variation_order}`} className={cellStyle}>
-						<img className="rounded-full p-2 overflow-visible bg-gradient-radial from-teal-300/60 via-teal-300/30 to-60%" src={props.shiny ? m.sprites.shiny : m.sprites.default} alt={m.name} />
+						<Image
+							className="rounded-full p-2 overflow-visible bg-gradient-radial from-teal-300/60 via-teal-300/30 to-60%"
+							width="100"
+							height="100"
+							src={props.shiny ? m.sprites.shiny : m.sprites.default}
+							alt={m.name}
+						/>
 						{props.showNumber ? <p className="text-center text-xs leading-none">#{formatPokeNum(m.order, 3)}</p> : null}
 						{props.showName ? (
 								<p className="text-center text-xs leading-none">

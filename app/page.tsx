@@ -9,11 +9,11 @@ import getPokedex from "@/app/api/pokedex"
 
 const useLocalStorage = (key:any, fbState:any) => {
 	const [value, setValue] = useState(
-		JSON.parse(window.localStorage.getItem(key) ?? "") ?? fbState
+		JSON.parse(localStorage.getItem(key) ?? "") ?? fbState
 	)
 
 	useEffect(() => {
-		localStorage.setItem(key, JSON.stringify(value))
+		window.localStorage.setItem(key, JSON.stringify(value))
 	}, [value, key])
 
 	return [value, setValue]
@@ -44,20 +44,12 @@ export default function Page() {
 	}, [dex])
 
 	useEffect(() => {
-		filterPokedex(genderOption, formOption, capOption)
-	}, [pokedex, genderOption, formOption, capOption])
-
-	useEffect(() => {
-		setDisplayCount(pokemon.length)
-	}, [pokemon])
-
-	const filterPokedex = (gender:boolean, forms:boolean, caps:boolean) => {
 		const docs = pokedex ?? []
 		let pokedexList:any = []
 
-		if (!gender) {
-			if (!forms) {
-				if (!caps) {
+		if (!genderOption) {
+			if (!formOption) {
+				if (!capOption) {
 					pokedexList = []
 
 					docs.map((spec:any) => (
@@ -103,7 +95,7 @@ export default function Page() {
 					setPokemon(pokedexList)
 				}
 			} else {
-				if (!caps) {
+				if (!capOption) {
 					pokedexList = []
 
 					docs.map((spec:any) => (
@@ -150,8 +142,8 @@ export default function Page() {
 				}
 			}
 		} else {
-			if (!forms) {
-				if (!caps) {
+			if (!formOption) {
+				if (!capOption) {
 					pokedexList = []
 
 					docs.map((spec:any) => (
@@ -197,7 +189,7 @@ export default function Page() {
 					setPokemon(pokedexList)
 				}
 			} else {
-				if (!caps) {
+				if (!capOption) {
 					pokedexList = []
 
 					docs.map((spec:any) => (
@@ -243,7 +235,11 @@ export default function Page() {
 				}
 			}
 		}
-	}
+	}, [pokedex, genderOption, formOption, capOption])
+
+	useEffect(() => {
+		setDisplayCount(pokemon.length)
+	}, [pokemon])
 
 	const createBoxes = () => {
 		const pokemonData = pokemon.sort((a:any,b:any) => a.order - b.order || a.variation_order - b.variation_order)
