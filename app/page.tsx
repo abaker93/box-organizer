@@ -17,7 +17,7 @@ const useLocalStorage = (key:any, initialValue:any)=> {
 		}
 	})
 
-	const setValue = value => {
+	const setValue = (value:any) => {
 		try {
 			const valueToStore = value instanceof Function ? value(state) : value
 			window.localStorage.setItem(key, JSON.stringify(valueToStore))
