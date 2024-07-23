@@ -24,6 +24,7 @@ const Box = (props:any) => {
 							height="100"
 							src={props.shiny ? m.sprites.shiny : m.sprites.default}
 							alt={m.name}
+							priority={props.box < 3 ? true : false}
 						/>
 						{props.showNumber ? <p className="text-center text-xs leading-none">#{formatPokeNum(m.order, 3)}</p> : null}
 						{props.showName ? (
