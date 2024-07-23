@@ -1,41 +1,19 @@
 'use client';
 
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import Header from "@/app/ui/header";
 import Form from "./ui/forms/form";
 import Count from "./ui/count";
 import Box from "./ui/box";
 import getPokedex from "@/app/api/pokedex";
-
-const useLocalStorage = (key:any, initialValue:any)=> {
-	const [state, setState] = useState(() => {
-		try {
-			const value = window.localStorage.getItem(key)
-			return value ? JSON.parse(value) : initialValue
-		} catch (e) {
-			console.log(e)
-		}
-	})
-
-	const setValue = (value:any) => {
-		try {
-			const valueToStore = value instanceof Function ? value(state) : value
-			window.localStorage.setItem(key, JSON.stringify(valueToStore))
-			setState(value)
-		} catch (e) {
-			console.log(e)
-		}
-	}
-
-	return [state, setValue]
-}
+import { useLocalStorage } from "@/app/lib/utils";
 
 export default function Page() {
 	const [lang, setLang] = useState('en')
+
 	const [dexStorage, setDexStorage] = useLocalStorage('dex', 'paldea')
 	const [dex, setDex] = useState(dexStorage)
 
-	const [loading, setLoading] = useState(true)
 	const [pokedex, setPokedex] = useState()
 	const [pokemon, setPokemon] = useState([])
 	const [displayCount, setDisplayCount] = useState(0)
@@ -64,7 +42,6 @@ export default function Page() {
 	useEffect(() => {
 		getPokedex(dex)
 			.then(data =>	setPokedex(data.documents))
-			.then(() => setLoading(false))
 	}, [dex])
 
 	useEffect(() => {
@@ -282,9 +259,7 @@ export default function Page() {
 		<>
 			<Header />
 
-			{loading ? (
-				<p>Loading...</p>
-			) : (
+			{pokemon && (
 				<main className="p-8 bg-fixed bg-gradient-to-b from-lime-100 to-teal-100">
 					<div className="max-w-7xl mx-auto pt-4">
 						<Form
@@ -328,8 +303,7 @@ export default function Page() {
 
 					<div className="max-w-7xl mx-auto pt-4">
 						<div className="grid grid-cols-2 gap-10">
-							{pokedex && createBoxes()
-								.filter((f:any) => f.pokemon.length > 0)
+							{pokemon && createBoxes()
 								.map((box:any) => (
 									<Box key={box.box} box={box.box} pokemon={box.pokemon} shiny={shinyOption} {...{showName, showNumber, showState}} />
 								))
