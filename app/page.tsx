@@ -18,7 +18,8 @@ export default function Page() {
 	const [options, setOptions] = useState({})
 
 	useEffect(() => {
-		const options = JSON.parse(localStorage.getItem('options'))
+		const ls:any = localStorage.getItem('lang')
+		const options = JSON.parse(ls)
 		const data = {
 			dex: options?.dex || 'paldea',
 			shiny: options?.shiny || false,

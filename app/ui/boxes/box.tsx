@@ -13,7 +13,8 @@ const Box = (props:any) => {
 	const [userData, setUserData] = useState({})
 
 	useEffect(() => {
-		let data = JSON.parse(localStorage.getItem('user-data'))
+		let ls:any = localStorage.getItem('user-data')
+		let data = JSON.parse(ls)
 
 		data = data
 			? data
@@ -31,7 +32,7 @@ const Box = (props:any) => {
 
 		setUserData(data)
 		setLoading(false)
-	}, [])
+	}, [props.options.dex])
 
 	const onChangeCheck = (e:any, m:any) => {
 		let item = userData[props.options.dex][m.order + "-" + m.variation_order]
