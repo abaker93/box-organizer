@@ -1,56 +1,50 @@
 'use client';
 
-import { Suspense, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Header from "@/app/ui/header";
 import Form from "./ui/forms/form";
 import Count from "./ui/count";
-import Box from "./ui/box";
+import Box from "./ui/boxes/box";
 import getPokedex from "@/app/api/pokedex";
-import { useLocalStorage } from "@/app/lib/utils";
 
 export default function Page() {
 	const [lang, setLang] = useState('en')
-
-	const [dexStorage, setDexStorage] = useLocalStorage('dex', 'paldea')
-	const [dex, setDex] = useState(dexStorage)
+	const [loading, setLoading] = useState(true)
 
 	const [pokedex, setPokedex] = useState()
 	const [pokemon, setPokemon] = useState([])
 	const [displayCount, setDisplayCount] = useState(0)
 
-	const [shinyStorage, setShinyStorage] = useLocalStorage('shinyOption', false)
-	const [shinyOption, setShinyOption] = useState(shinyStorage)
-
-	const [genderStorage, setGenderStorage] = useLocalStorage('genderOption', false)
-	const [genderOption, setGenderOption] = useState(genderStorage)
-
-	const [formStorage, setFormStorage] = useLocalStorage('formOption', false)
-	const [formOption, setFormOption] = useState(formStorage)
-
-	const [capStorage, setCapStorage] = useLocalStorage('capOption', false)
-	const [capOption, setCapOption] = useState(capStorage)
-
-	const [showNameStorage, setShowNameStorage] = useLocalStorage('showName', false)
-	const [showName, setShowName] = useState(showNameStorage)
-
-	const [showNumberStorage, setShowNumberStorage] = useLocalStorage('showNumber', false)
-	const [showNumber, setShowNumber] = useState(showNumberStorage)
-
-	const [showStateStorage, setShowStateStorage] = useLocalStorage('showState', false)
-	const [showState, setShowState] = useState(showStateStorage)
+	const [options, setOptions] = useState({})
 
 	useEffect(() => {
-		getPokedex(dex)
+		const options = JSON.parse(localStorage.getItem('options'))
+		const data = {
+			dex: options?.dex || 'paldea',
+			shiny: options?.shiny || false,
+			gender: options?.gender || false,
+			form: options?.form || false,
+			cap: options?.cap || false,
+			name: options?.name || false,
+			number: options?.number || false,
+			state: options?.state || false
+		}
+		setOptions(data)
+		setLoading(false)
+	}, [])
+
+	useEffect(() => {
+		getPokedex(options.dex)
 			.then(data =>	setPokedex(data.documents))
-	}, [dex])
+	}, [options])
 
 	useEffect(() => {
 		const docs = pokedex ?? []
 		let pokedexList:any = []
 
-		if (!genderOption) {
-			if (!formOption) {
-				if (!capOption) {
+		if (!options.gender) {
+			if (!options.form) {
+				if (!options.cap) {
 					pokedexList = []
 
 					docs.map((spec:any) => (
@@ -96,7 +90,7 @@ export default function Page() {
 					setPokemon(pokedexList)
 				}
 			} else {
-				if (!capOption) {
+				if (!options.cap) {
 					pokedexList = []
 
 					docs.map((spec:any) => (
@@ -143,8 +137,8 @@ export default function Page() {
 				}
 			}
 		} else {
-			if (!formOption) {
-				if (!capOption) {
+			if (!options.form) {
+				if (!options.cap) {
 					pokedexList = []
 
 					docs.map((spec:any) => (
@@ -190,7 +184,7 @@ export default function Page() {
 					setPokemon(pokedexList)
 				}
 			} else {
-				if (!capOption) {
+				if (!options.cap) {
 					pokedexList = []
 
 					docs.map((spec:any) => (
@@ -236,7 +230,7 @@ export default function Page() {
 				}
 			}
 		}
-	}, [pokedex, genderOption, formOption, capOption])
+	}, [pokedex, options.gender, options.form, options.cap])
 
 	useEffect(() => setDisplayCount(pokemon.length), [pokemon])
 
@@ -256,62 +250,69 @@ export default function Page() {
 	}
 
 	return (
-		<>
+		<main className="min-h-screen bg-fixed bg-gradient-to-b from-lime-100 to-teal-100">
 			<Header />
 
-			{pokemon && (
-				<main className="p-8 bg-fixed bg-gradient-to-b from-lime-100 to-teal-100">
-					<div className="max-w-7xl mx-auto pt-4">
-						<Form
-							{...{dex, shinyOption, genderOption, formOption, capOption, showName, showNumber, showState}}
-							onChangeDex={(e:any) => {
-								setDexStorage((e.target.value).toLowerCase())
-								setDex((e.target.value).toLowerCase())
-							}}
-							onChangeShiny={(e:any) => {
-								setShinyStorage(e.target.checked)
-								setShinyOption(e.target.checked)
-							}}
-							onChangeGender={(e:any) => {
-								setGenderStorage(e.target.checked)
-								setGenderOption(e.target.checked)
-							}}
-							onChangeForm={(e:any) => {
-								setFormStorage(e.target.checked)
-								setFormOption(e.target.checked)
-							}}
-							onChangeCap={(e:any) => {
-								setCapStorage(e.target.checked)
-								setCapOption(e.target.checked)
-							}}
-							onChangeShowName={(e:any) => {
-								setShowNameStorage(e.target.checked)
-								setShowName(e.target.checked)
-							}}
-							onChangeShowNumber={(e:any) => {
-								setShowNumberStorage(e.target.checked)
-								setShowNumber(e.target.checked)
-							}}
-							onChangeShowState={(e:any) => {
-								setShowStateStorage(e.target.checked)
-								setShowState(e.target.checked)
-							}}
-						/>
-						<p>Shiny: {shinyOption}</p>
-						<Count total={displayCount} />
-					</div>
-
-					<div className="max-w-7xl mx-auto pt-4">
-						<div className="grid grid-cols-2 gap-10">
-							{pokemon && createBoxes()
-								.map((box:any) => (
-									<Box key={box.box} box={box.box} pokemon={box.pokemon} shiny={shinyOption} {...{showName, showNumber, showState}} />
-								))
-							}
+			<div className="max-w-7xl mx-auto p-8">
+				{loading ? (
+					<p>Loading...</p>
+				) : (
+					<>
+						<div className="pt-4">
+							<Form
+								options={options}
+								onChangeDex={(e:any) => {
+									setOptions({...options, dex: e.target.value})
+									localStorage.setItem('options', JSON.stringify({...options, dex: e.target.value}))
+								}}
+								onChangeShiny={(e:any) => {
+									setOptions({...options, shiny: e.target.checked})
+									localStorage.setItem('options', JSON.stringify({...options, shiny: e.target.checked}))
+								}}
+								onChangeGender={(e:any) => {
+									setOptions({...options, gender: e.target.checked})
+									localStorage.setItem('options', JSON.stringify({...options, gender: e.target.checked}))
+								}}
+								onChangeForm={(e:any) => {
+									setOptions({...options, form: e.target.checked})
+									localStorage.setItem('options', JSON.stringify({...options, form: e.target.checked}))
+								}}
+								onChangeCap={(e:any) => {
+									setOptions({...options, cap: e.target.checked})
+									localStorage.setItem('options', JSON.stringify({...options, cap: e.target.checked}))
+								}}
+								onChangeShowName={(e:any) => {
+									setOptions({...options, name: e.target.checked})
+									localStorage.setItem('options', JSON.stringify({...options, name: e.target.checked}))
+								}}
+								onChangeShowNumber={(e:any) => {
+									setOptions({...options, number: e.target.checked})
+									localStorage.setItem('options', JSON.stringify({...options, number: e.target.checked}))
+								}}
+								onChangeShowState={(e:any) => {
+									setOptions({...options, state: e.target.checked})
+									localStorage.setItem('options', JSON.stringify({...options, state: e.target.checked}))
+								}}
+							/>
+							<Count total={displayCount} />
 						</div>
-					</div>
-				</main>
-			)}
-		</>
+						<div className="pt-4">
+							<div className="grid grid-cols-2 gap-10">
+								{pokemon && createBoxes()
+									.map((box:any) => (
+										<Box
+											key={box.box}
+											box={box.box}
+											pokemon={box.pokemon}
+											options={options}
+										/>
+									))
+								}
+							</div>
+						</div>
+					</>
+				)}
+			</div>
+		</main>
 	)
 }

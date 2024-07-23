@@ -13,6 +13,14 @@ const config: Config = {
         "gradient-conic":
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
       },
+      dropShadow: {
+        "outline-white": [
+          "1px 1px 0 white",
+          "-1px -1px 0 white",
+          "-1px 1px 0 white",
+          "1px -1px 0 white"
+        ]
+      }
     },
   },
   plugins: [

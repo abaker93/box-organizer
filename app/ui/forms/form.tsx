@@ -1,12 +1,5 @@
 interface propTypes {
-	dex: string,
-	shinyOption: boolean,
-	genderOption: boolean,
-	formOption: boolean,
-	capOption: boolean,
-	showName: boolean,
-	showNumber: boolean,
-	showState: boolean,
+	options:any,
 	onChangeDex: any,
 	onChangeShiny:any,
 	onChangeGender:any,
@@ -18,9 +11,7 @@ interface propTypes {
 }
 
 const Form = ({
-	dex,
-	shinyOption, genderOption, formOption, capOption,
-	showName, showNumber, showState,
+	options,
 	onChangeDex,
 	onChangeShiny, onChangeGender, onChangeForm, onChangeCap,
 	onChangeShowName, onChangeShowNumber, onChangeShowState
@@ -31,7 +22,7 @@ const Form = ({
 		'Kitakami',
 		'Blueberry'
 	]
-
+	
 	const checkboxGroupStyles = 'flex gap-x-2 items-start'
 	const checkboxContainerStyles = 'flex h-6 items-center'
 	const checkboxStyles = `h-4 w-4 rounded border-gray-300 text-orange-600 focus:ring-orange-600`
@@ -52,7 +43,7 @@ const Form = ({
 							name="pokedex"
 							className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-slate-300 focus:ring-2 focus:ring-inset focus:ring-orange-600 sm:text-sm sm:leading-6"
 							onChange={onChangeDex}
-							defaultValue={dex}
+							defaultValue={options.dex}
 						>
 							{pokedex.map((pokedex) => (
 								<option value={pokedex.toLowerCase()} key={pokedex}>{pokedex}</option>
@@ -66,7 +57,7 @@ const Form = ({
 						<div className="mt-2 flex gap-x-6 text-slate-600">
 							<div className={checkboxGroupStyles}>
 								<div className={checkboxContainerStyles}>
-									<input type="checkbox" id="shiny" name="shiny" checked={shinyOption} className={checkboxStyles} onChange={onChangeShiny} />
+									<input type="checkbox" id="shiny" name="shiny" checked={options.shiny} className={checkboxStyles} onChange={onChangeShiny} />
 								</div>
 								<div>
 									<label htmlFor="shiny">Shiny</label>
@@ -74,7 +65,7 @@ const Form = ({
 							</div>
 							<div className={checkboxGroupStyles}>
 								<div className={checkboxContainerStyles}>
-									<input type="checkbox" id="gender" name="gender" checked={genderOption} className={checkboxStyles} onChange={onChangeGender} />
+									<input type="checkbox" id="gender" name="gender" checked={options.gender} className={checkboxStyles} onChange={onChangeGender} />
 								</div>
 								<div>
 									<label htmlFor="gender">Gender Differences</label>
@@ -82,7 +73,7 @@ const Form = ({
 							</div>
 							<div className={checkboxGroupStyles}>
 								<div className={checkboxContainerStyles}>
-									<input type="checkbox" id="forms" name="forms" checked={formOption} className={checkboxStyles} onChange={onChangeForm} />
+									<input type="checkbox" id="forms" name="forms" checked={options.form} className={checkboxStyles} onChange={onChangeForm} />
 								</div>
 								<div>
 									<label htmlFor="forms">Multiple Forms</label>
@@ -90,7 +81,7 @@ const Form = ({
 							</div>
 							<div className={checkboxGroupStyles}>
 								<div className={checkboxContainerStyles}>
-									<input type="checkbox" id="caps" name="caps" checked={capOption} className={checkboxStyles} onChange={onChangeCap} />
+									<input type="checkbox" id="caps" name="caps" checked={options.cap} className={checkboxStyles} onChange={onChangeCap} />
 								</div>
 								<div>
 									<label htmlFor="caps">Pikachu Caps</label>
@@ -107,7 +98,7 @@ const Form = ({
 						<div className="mt-2 flex gap-x-6 text-slate-600">
 							<div className={checkboxGroupStyles}>
 								<div className={checkboxContainerStyles}>
-									<input type="checkbox" id="names" name="names" checked={showName} className={checkboxStyles} onChange={onChangeShowName} />
+									<input type="checkbox" id="names" name="names" checked={options.name} className={checkboxStyles} onChange={onChangeShowName} />
 								</div>
 								<div>
 									<label htmlFor="names">Show Names</label>
@@ -115,7 +106,7 @@ const Form = ({
 							</div>
 							<div className={checkboxGroupStyles}>
 								<div className={checkboxContainerStyles}>
-									<input type="checkbox" id="numbers" name="numbers" checked={showNumber} className={checkboxStyles} onChange={onChangeShowNumber} />
+									<input type="checkbox" id="numbers" name="numbers" checked={options.number} className={checkboxStyles} onChange={onChangeShowNumber} />
 								</div>
 								<div>
 									<label htmlFor="numbers">Show Numbers</label>
@@ -123,7 +114,7 @@ const Form = ({
 							</div>
 							<div className={checkboxGroupStyles}>
 								<div className={checkboxContainerStyles}>
-									<input type="checkbox" id="buttons" name="buttons" checked={showState} className={checkboxStyles} onChange={onChangeShowState} />
+									<input type="checkbox" id="buttons" name="buttons" checked={options.state} className={checkboxStyles} onChange={onChangeShowState} />
 								</div>
 								<div>
 									<label htmlFor="buttons">Show States</label>
