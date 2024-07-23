@@ -15,7 +15,16 @@ export default function Page() {
 	const [pokemon, setPokemon] = useState([])
 	const [displayCount, setDisplayCount] = useState(0)
 
-	const [options, setOptions] = useState({})
+	const [options, setOptions] = useState({
+		dex: 'paldea',
+		shiny: false,
+		gender: false,
+		form: false,
+		cap: false,
+		name: false,
+		number: false,
+		state: false
+	})
 
 	useEffect(() => {
 		const ls:any = localStorage.getItem('lang')
