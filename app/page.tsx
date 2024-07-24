@@ -27,7 +27,7 @@ export default function Page() {
 	})
 
 	useEffect(() => {
-		const ls:any = localStorage.getItem('lang')
+		const ls:any = localStorage.getItem('options')
 		const options = JSON.parse(ls)
 		const data = {
 			dex: options?.dex || 'paldea',

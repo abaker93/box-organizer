@@ -10,7 +10,20 @@ const Box = (props:any) => {
 	}
 
 	const [loading, setLoading] = useState(true)
-	const [userData, setUserData] = useState({})
+	
+	interface UserData {
+		[dex: string]: {
+			[id: string]: {
+				_id: string
+				check: boolean
+				shiny: boolean
+				trade: boolean
+				evolve: boolean
+			}
+		}
+	}
+	
+	const [userData, setUserData] = useState<UserData>({})
 
 	useEffect(() => {
 		let ls:any = localStorage.getItem('user-data')
