@@ -3,8 +3,6 @@ import { formatPokeNum, getPokeName } from "@/app/lib/utils";
 import clsx from 'clsx';
 
 const Cell = (props:any) => {
-	console.log(props.data)
-
 	return (
 		props.pokemon ? (
 			<div onClick={props.onChangeCheck}>

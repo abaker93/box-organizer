@@ -10,7 +10,7 @@ const Box = (props:any) => {
 	}
 
 	const [loading, setLoading] = useState(true)
-	
+
 	interface UserData {
 		[dex: string]: {
 			[id: string]: {
@@ -29,9 +29,27 @@ const Box = (props:any) => {
 		let ls:any = localStorage.getItem('user-data')
 		let data = JSON.parse(ls)
 
-		data = data
-			? data
-			: {
+		if (data) {
+			console.log("yes data")
+			if (data[props.options.dex]) {
+				console.log(`yes data[${props.options.dex}]`)
+				data = data
+			} else {
+				data = {
+					...data,
+					[props.options.dex]: {
+						"1-0": {
+							"_id": "1-0",
+							"check": false,
+							"shiny": false,
+							"trade": false,
+							"evolve": false
+						}
+					}
+				}
+			}
+		} else {
+			data = {
 				[props.options.dex]: {
 					"1-0": {
 						"_id": "1-0",
@@ -42,8 +60,12 @@ const Box = (props:any) => {
 					}
 				}
 			}
+		}
 
+		// console.log(data)
 		setUserData(data)
+		localStorage.setItem('user-data', JSON.stringify(data))
+
 		setLoading(false)
 	}, [props.options.dex])
 
@@ -74,7 +96,7 @@ const Box = (props:any) => {
 	}
 
 	return (
-		loading ? (
+		loading || !userData[props.options.dex] ? (
 			<p>Loading...</p>
 		) : (
 			<div className="rounded-3xl bg-white/90 border-[6px] border-teal-500 shadow-lg">
